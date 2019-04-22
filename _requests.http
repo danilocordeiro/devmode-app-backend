@@ -14,3 +14,39 @@ Content-Type: application/json
   "email": "test@test.com",
   "password": "123456"
 }
+###
+POST http://localhost:3333/tasks
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsImlhdCI6MTU1NTkwMzA2NX0.JdPL5dGnXbxoNal_2IJu_TITgKysX37wM3afdbkOe_I
+Content-Type: application/json
+
+{
+  "title": "primeiro",
+  "description": "desc primeiro"
+}
+###
+POST http://localhost:3333/tasks
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsImlhdCI6MTU1NTkwMzA2NX0.JdPL5dGnXbxoNal_2IJu_TITgKysX37wM3afdbkOe_I
+Content-Type: application/json
+
+{
+  "title": "Segundo",
+  "description": "desc segundo",
+  "completed": true
+}
+###
+PUT http://localhost:3333/tasks/3
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsImlhdCI6MTU1NTkwMzA2NX0.JdPL5dGnXbxoNal_2IJu_TITgKysX37wM3afdbkOe_I
+Content-Type: application/json
+
+{
+  "completed": true
+}
+###
+
+GET http://localhost:3333/tasks/3
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsImlhdCI6MTU1NTkwMzA2NX0.JdPL5dGnXbxoNal_2IJu_TITgKysX37wM3afdbkOe_I
+Content-Type: application/json
+###
+DELETE http://localhost:3333/tasks/3
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsImlhdCI6MTU1NTkwMzA2NX0.JdPL5dGnXbxoNal_2IJu_TITgKysX37wM3afdbkOe_I
+Content-Type: application/json

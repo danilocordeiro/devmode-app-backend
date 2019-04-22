@@ -1,5 +1,7 @@
 'use strict'
 
+const Task = use('App/Models/Task')
+
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
@@ -17,20 +19,12 @@ class TaskController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
+  async index () {
+    const tasks = Task.all()
+
+    return tasks
   }
 
-  /**
-   * Render a form to be used for creating a new task.
-   * GET tasks/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create ({ request, response, view }) {
-  }
 
   /**
    * Create/save a new task.
@@ -40,7 +34,17 @@ class TaskController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store ({ request, response }) {
+  async store ({ auth, request, response }) {
+    const { id } = auth.user
+    const data = request.only([
+      'title',
+      'description',
+      'completed'
+    ])
+
+    const task = await Task.create({...data, user_id: id })
+
+    return task
   }
 
   /**
@@ -52,19 +56,10 @@ class TaskController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
-  }
+  async show ({ params }) {
+    const task = await Task.findOrFail(params.id)
 
-  /**
-   * Render a form to update an existing task.
-   * GET tasks/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
+    return task
   }
 
   /**
@@ -76,6 +71,19 @@ class TaskController {
    * @param {Response} ctx.response
    */
   async update ({ params, request, response }) {
+    const task = await Task.findOrFail(params.id)
+
+    const data = request.only([
+      'title',
+      'description',
+      'completed'
+    ])
+
+    task.merge(data)
+
+    await task.save()
+
+    return task
   }
 
   /**
@@ -86,7 +94,14 @@ class TaskController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
+  async destroy ({ params, auth, response }) {
+    const task = await Task.findOrFail(params.id)
+
+    if(task.user_id !== auth.user.id) {
+      return response.status(401).send({ error: 'Not authorized'})
+    }
+
+    await task.delete();
   }
 }
 
